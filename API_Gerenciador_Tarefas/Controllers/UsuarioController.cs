@@ -10,8 +10,7 @@ namespace API_Gerenciador_Tarefas.Controllers
     public class UsuarioController : Controller
     {
 
-        private readonly ApiContext _context;
-
+        private readonly ApiContext _context; 
 
         public UsuarioController(ApiContext context)
         {
@@ -63,6 +62,27 @@ namespace API_Gerenciador_Tarefas.Controllers
 
             _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<Tarefas>> GetUsuariosToTarefa(int? id)
+        {
+            if (id == null)
+                throw new ArgumentException("Id não preenchido");
+
+            var usuario = await Get(id);
+
+            if (usuario == null)
+                throw new ArgumentException("Usuário não encontrado");
+
+            return await _context.Tarefas.Where(t => t.UsuarioId == id).ToListAsync();
+        }
+
+        public async Task<Usuario> Login(string login, string senha)
+        {
+            if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(senha))
+                throw new ArgumentException("Login ou senha não preenchidos");
+
+            return await _context.Usuarios.FirstOrDefaultAsync(u => u.Nome == login && u.Senha == senha);
         }
     }
 }

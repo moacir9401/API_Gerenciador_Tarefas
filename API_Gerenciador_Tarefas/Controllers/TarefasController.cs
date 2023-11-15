@@ -85,5 +85,13 @@ namespace API_Gerenciador_Tarefas.Controllers
         {
             return await _context.Tarefas.Where(t => t.DataVencimento >= dataInicio && t.DataVencimento <= dataTermino).ToListAsync();
         }
+
+
+        public async Task<Usuario> Usuario(int idUsuario)
+        {
+            var tarefa = await _context.Tarefas.Include(t => t.Usuario).FirstOrDefaultAsync(t => t.UsuarioId == idUsuario);
+
+            return tarefa.Usuario;
+        }
     }
 }
