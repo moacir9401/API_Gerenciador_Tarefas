@@ -11,7 +11,7 @@ namespace API_Gerenciador_Tarefas.Controllers
     {
 
         private readonly ApiContext _context;
- 
+
         public TarefasController(ApiContext context)
         {
             _context = context;
@@ -63,23 +63,27 @@ namespace API_Gerenciador_Tarefas.Controllers
             _context.Tarefas.Remove(Tarefa);
             await _context.SaveChangesAsync();
         }
+        [HttpGet("GetTarefasToConluidas")]
 
         public async Task<List<Tarefas>> GetTarefasToConluidas()
         {
             return await _context.Tarefas.Where(t => t.Concluida).ToListAsync();
         }
+        [HttpGet("GetTarefasToNaoConluidas")]
         public async Task<List<Tarefas>> GetTarefasToNaoConluidas()
         {
             return await _context.Tarefas.Where(t => !t.Concluida).ToListAsync();
         }
+        [HttpGet("PeriodoConclusao")]
 
         public async Task<List<Tarefas>> PeriodoConclusao(DateTime dataInicio, DateTime dataTermino)
         {
-             return await _context.Tarefas.Where(t => t.DataConclusao >= dataInicio && t.DataConclusao <= dataTermino).ToListAsync();
+            return await _context.Tarefas.Where(t => t.DataConclusao >= dataInicio && t.DataConclusao <= dataTermino).ToListAsync();
         }
+        [HttpGet("PeriodoVencimento")]
         public async Task<List<Tarefas>> PeriodoVencimento(DateTime dataInicio, DateTime dataTermino)
         {
-             return await _context.Tarefas.Where(t => t.DataVencimento >= dataInicio && t.DataVencimento <= dataTermino).ToListAsync();
+            return await _context.Tarefas.Where(t => t.DataVencimento >= dataInicio && t.DataVencimento <= dataTermino).ToListAsync();
         }
     }
 }
